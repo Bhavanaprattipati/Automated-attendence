@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="col-md-10">
+  <div class="card p-5 bg-white" style="min-width:900px;">
+    <h2 class="mb-4 text-success"><i class="fa-solid fa-image"></i> Upload Group Photo</h2>
+
+    {% if message %}
+      <div class="alert alert-warning">{{ message }}</div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('upload') }}" enctype="multipart/form-data" class="mb-4">
+      <div class="input-group input-group-lg">
+        <input type="file" name="file" class="form-control form-control-lg" required>
+        <button type="submit" class="btn btn-success btn-lg">
+          <i class="fa-solid fa-upload"></i> Process
+        </button>
+      </div>
+    </form>
+
+    {% if processed_image %}
+      <hr>
+      <h3 class="text-primary"><i class="fa-solid fa-check-circle"></i> Processed Image</h3>
+      <div class="text-center mt-3">
+        <img src="{{ url_for('static', filename='processed/' ~ processed_image) }}" 
+             class="img-fluid rounded shadow" style="max-height:500px;">
+      </div>
+    {% endif %}
+
+    {% if attendance %}
+      <hr>
+      <h3 class="text-primary"><i class="fa-solid fa-list-check"></i> Attendance List</h3>
+      <table class="table table-bordered table-hover mt-3 text-center fs-5">
+        <thead class="table-dark">
+          <tr><th>Student</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          {% for name, status in attendance.items() %}
+            <tr class="{{ 'table-success' if status == 'Present' else 'table-danger' }}">
+              <td><i class="fa-solid fa-user"></i> {{ name }}</td>
+              <td><b>{{ status }}</b></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
